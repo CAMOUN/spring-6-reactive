@@ -1,5 +1,7 @@
 package guru.springframework.spring6reactive.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import guru.springframework.spring6reactive.config.DatabaseConfig;
 import guru.springframework.spring6reactive.domain.Beer;
 import org.junit.jupiter.api.Test;
@@ -11,7 +13,7 @@ import java.math.BigDecimal;
 
 @DataR2dbcTest
 @Import(DatabaseConfig.class)
-class BeerRepositoryTest {
+public class BeerRepositoryTest {
 
     @Autowired
     BeerRepository beerRepository;
@@ -22,7 +24,7 @@ class BeerRepositoryTest {
                 .subscribe(System.out::println);
     }
 
-    Beer getTestBeer() {
+    public static Beer getTestBeer() {
         return Beer.builder()
                 .beerName("Space Dust")
                 .beerStyle("IPA")
@@ -30,5 +32,11 @@ class BeerRepositoryTest {
                 .quantityOnHand(12)
                 .upc("1245z")
                 .build();
+    }
+
+    @Test
+    void testCreateJson() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        System.out.println(objectMapper.writeValueAsString(getTestBeer()));
     }
 }
